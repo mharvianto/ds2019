@@ -2,5 +2,5 @@
 @mharvianto
 
 ## Session 1
+* [pointer](./Session01/Untitled1.cpp) 
 * struct
-* pointer
