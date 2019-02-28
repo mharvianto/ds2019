@@ -2,5 +2,7 @@
 @mharvianto
 
 ## Session 1
-* [pointer](./Session01/Untitled1.cpp) 
-* struct
+* [Pointer](./Session01/Untitled1.cpp)
+* [Array and malloc](./Session01/Untitled2.cpp)
+* [Struct](./Session01/Untitled3.cpp)
+* [Linked List](./Session01/Untitled4.cpp)
