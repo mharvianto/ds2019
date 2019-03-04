@@ -6,3 +6,10 @@
 * [Array and malloc](./Session01/Untitled2.cpp)
 * [Struct](./Session01/Untitled3.cpp)
 * [Linked List](./Session01/Untitled4.cpp)
+
+## Session 2
+* [Single Linked List](./Session02/SingleLinkedList.cpp)
+	* push_d (front/depan)
+	* push_b (back/belakang)
+	* view (head to tail)
+	* pop_d (front/depan)
