@@ -44,6 +44,31 @@ void push_d(char t_nama[], int t_umur){ // depan / front
 	tail->next = NULL;
 }
 
+void push_t_index(int index, char t_nama[], int t_umur){// tengah / middle by index
+	if(index == 0){
+		push_d(t_nama, t_umur);
+	}else{
+		struct Node *temp;
+		temp = head;
+		for(int i=0;i<index-1;i++){
+			if(temp != NULL){
+				temp = temp->next;
+			}
+		}
+		if(temp == NULL || temp == tail){
+			push_b(t_nama, t_umur);
+		}else{
+			struct Node *new_node;
+			new_node = (struct Node*)malloc(sizeof(struct Node));
+			strcpy(new_node->nama, t_nama);
+			new_node->umur = t_umur;
+			// ubah linknya
+			new_node->next = temp->next;
+			temp->next = new_node;
+		}
+	}
+}
+
 void view(){
 	struct Node *temp;
 	temp = head; // pindahkan temp ke head
@@ -64,6 +89,61 @@ void pop_d(){ // front / depan
 	}
 }
 
+void pop_all(){ // hapus semua data
+	while(head != NULL){
+		pop_d();
+	}
+}
+
+void pop_b(){ // hapus belakang / back
+	if(head != NULL){ // ada data
+		if(head == tail){ // cuma 1 data
+			free(head);
+			head = NULL;
+			tail = NULL;
+		}else{ // lebih dari 1 data
+			struct Node *temp;
+			temp = head;
+			while(temp->next != tail){ 
+				temp = temp->next;
+			}
+			// logika 1 (swap tail dan temp)
+			tail = temp; // tail tunjuk temp
+			temp = temp->next; // temp tunjuk ke berikutnya
+			free(temp); // melepaskan memori
+			tail->next = NULL; // set tail ke next jadi null
+			// logika 2 (langsung hapus tail)
+			// free(tail);
+			// tail = temp;
+			// tail->next = NULL;
+		}
+	}
+}
+
+void pop_t_index(int index){ // hapus tengah/middle by index
+	if(index == 0){
+		pop_d();
+	}else{
+		struct Node *temp;
+		temp = head;
+		for(int i=0;i<index-1;i++){
+			if(temp != NULL){
+				temp = temp->next;
+			}
+		}
+		if(temp == NULL || temp == tail){
+			
+		}else if(temp->next == tail){
+			pop_b();
+		}else{
+			struct Node *del;
+			del = temp->next;
+			temp->next = del->next;
+			free(del);
+		}
+	}
+}
+
 int main(){
 	push_b("Kevin", 18);
 	push_b("Gideon", 19);
@@ -71,6 +151,12 @@ int main(){
 	view();
 	pop_d(); // hapus kevin
 	push_d("Butet", 20);
+	push_t_index(3, "Lili", 21);
+	pop_t_index(1);
+	view();
+	pop_b(); // hapus jojo
+	view();
+	pop_all();
 	view();
 	return 0;
 }
