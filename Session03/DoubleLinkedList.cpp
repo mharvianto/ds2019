@@ -110,6 +110,15 @@ void pop_all(){
 	}
 }
 
+struct Node *search(int angka){
+	struct Node *temp;
+	temp = head;
+	while(temp != 0 && temp->angka != angka){
+		temp = temp->next;
+	}
+	return temp;
+}
+
 void pop_t(int angka){
 	// linear searching
 	struct Node *temp;
@@ -123,12 +132,21 @@ void pop_t(int angka){
 		}else if(temp == tail){
 			pop_b();
 		}else{
-			struct Node *before, *after;
-			before = temp->prev;
-			after = temp->next;
-			
-			before->next = after;
-			after->prev = before;
+//			struct Node *before, *after;
+//			before = temp->prev;
+//			after = temp->next;
+//			
+//			after->prev = before;
+//			before->next = after;
+			// cuma 1 variable
+//			struct Node *before;
+//			before = temp->prev;
+//			
+//			temp->next->prev = before;
+//			before->next = temp->next;
+			// tanpa variable
+			temp->next->prev = temp->prev;
+			temp->prev->next = temp->next;
 			
 			free(temp);
 		}
@@ -137,22 +155,30 @@ void pop_t(int angka){
 
 int main(){
 	//srand(time(0));
-	for(int i=0;i<10;i++){
+	for(int i=0;i<1000000;i++){
 		push_t(rand() % 100 + 1);
 		// 0..30000 % 100 -> 0..99 + 1 -> 1..100
 		// printf("tail: %d\n", tail->angka);
 	}
-	view();
+	//view();
 //	for(int i=0;i<15;i++){
 //		if(tail != 0){
 //			printf("tail: %d\n", tail->angka);
 //		}
 //		pop_b();
 //	}
+	printf("Sudah input\n");
 	int input;
 	scanf("%d", &input);
-	pop_t(input); 
-	view();
+	//pop_t(input); 
+	struct Node *temp;
+	temp = search(input);
+	if(temp != 0) {
+		printf("Ketemu\n");
+	} else {
+		printf("Tidak ketemu\n");
+	}
+	//view();
 	pop_all();
 	return 0;
 }
