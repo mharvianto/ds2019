@@ -37,6 +37,36 @@ void push_b(int angka){
 	head->prev = tail->next = NULL;
 }
 
+void push_t(int angka) {//push tengah / middle
+	if(head == 0){
+		push_d(angka);
+	}else{
+		if(angka < head->angka){
+			push_d(angka);
+		}else if(angka >= tail->angka){
+			push_b(angka);
+		}else{
+			struct Node *newNode;
+			newNode = (struct Node*)malloc(sizeof(struct Node));
+			newNode->angka = angka;
+			
+			// cari yang lebih besar dari angka
+			struct Node *temp, *before;
+			temp = head;
+			while(temp != 0 && angka >= temp->angka){
+				temp = temp->next;
+			}
+			before = temp->prev;
+			
+			// sambungkan link
+			before->next = newNode;
+			temp->prev = newNode;
+			newNode->next = temp;
+			newNode->prev = before;
+		}
+	}
+}
+
 void view(){
 	struct Node *temp = head;
 	while(temp != NULL){
@@ -80,12 +110,37 @@ void pop_all(){
 	}
 }
 
+void pop_t(int angka){
+	// linear searching
+	struct Node *temp;
+	temp = head;
+	while(temp != 0 && temp->angka != angka){
+		temp = temp->next;
+	}
+	if(temp != 0){
+		if(temp == head){
+			pop_d();
+		}else if(temp == tail){
+			pop_b();
+		}else{
+			struct Node *before, *after;
+			before = temp->prev;
+			after = temp->next;
+			
+			before->next = after;
+			after->prev = before;
+			
+			free(temp);
+		}
+	}
+}
+
 int main(){
 	//srand(time(0));
 	for(int i=0;i<10;i++){
-		push_b(rand() % 100 + 1);
+		push_t(rand() % 100 + 1);
 		// 0..30000 % 100 -> 0..99 + 1 -> 1..100
-		printf("tail: %d\n", tail->angka);
+		// printf("tail: %d\n", tail->angka);
 	}
 	view();
 //	for(int i=0;i<15;i++){
@@ -94,7 +149,10 @@ int main(){
 //		}
 //		pop_b();
 //	}
-	pop_all();
+	int input;
+	scanf("%d", &input);
+	pop_t(input); 
 	view();
+	pop_all();
 	return 0;
 }
