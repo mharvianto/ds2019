@@ -79,12 +79,34 @@ Node *search(Node *curr, int angka){
 	}else return 0;
 }
 
+Node **getLargest(Node **curr){
+	if(*curr){
+		if((*curr)->right == 0) {
+			return curr;
+		} else {
+			return getLargest(&(*curr)->right);
+		}
+	} else return 0;
+}
+
 void pop(Node **curr, int angka){
 	if(*curr){
 		if(angka == (*curr)->angka) {
 			if((*curr)->left == 0 && (*curr)->right == 0){
 				free(*curr);
 				*curr = 0;
+			} else if((*curr)->left && (*curr)->right) {
+				Node **temp = getLargest(&(*curr)->left);
+				(*curr)->angka = (*temp)->angka;
+				pop(temp, (*temp)->angka);
+			} else if((*curr)->right){
+				Node *temp = *curr;
+				*curr = (*curr)->right;
+				free(temp);
+			} else {
+				Node *temp = *curr;
+				*curr = (*curr)->left;
+				free(temp);
 			}
 		} else if(angka < (*curr)->angka) {
 			pop(&(*curr)->left, angka);
@@ -95,26 +117,75 @@ void pop(Node **curr, int angka){
 }
 
 int main(){
-	push(&root, 50);
-	push(&root, 45);
-	push(&root, 75);
-	push(&root, 60);
-	push(&root, 30);
-	push(&root, 47);
-	inOrder(root); printf("\n");
-	preOrder(root); printf("\n");
-	postOrder(root); printf("\n");
-	viewTree(root, 0);
-	int input;
-	scanf("%d", &input);
-	if(search(root, input)){
-		printf("Ketemu\n");
-	} else {
-		printf("Tidak ketemu\n");
-	}
-	pop(&root, input);
-	viewTree(root, 0);
+	int input = 0, angka;
+	do{
+		viewTree(root, 0);
+		printf( "Menu\n"
+				"1. push\n"
+				"2. inOrder\n"
+				"3. preOrder\n"
+				"4. postOrder\n"
+				"5. search\n"
+				"6. pop\n"
+				"7. exit\n"
+				"Input: ");
+		scanf("%d", &input);
+		switch(input){
+			case 1:	
+				printf("Input number: ");
+				scanf("%d", &angka);
+				push(&root, angka);
+				break;
+			case 2:
+				inOrder(root); printf("\n"); break;
+			case 3:
+				preOrder(root); puts(""); break;
+			case 4:
+				postOrder(root); puts(""); break;
+			case 5:
+				printf("Input number: ");
+				scanf("%d", &angka);
+				if(search(root, angka)){
+					printf("Found\n");
+				}else{
+					printf("Not found\n");
+				}
+				break;
+			case 6:
+				printf("Input number: ");
+				scanf("%d", &angka);
+				pop(&root, angka);
+				break;
+			case 7:
+				printf("Thanks for using app\n"); break;
+			default:
+				printf("Wrong input\n"); break;
+		}
+	}while(input != 7);
 	popAll(&root);
+//	push(&root, 50);
+//	push(&root, 45);
+//	push(&root, 75);
+//	push(&root, 60);
+//	push(&root, 30);
+//	push(&root, 47);
+//	push(&root, 65);
+//	push(&root, 61);
+//	push(&root, 68);
+//	inOrder(root); printf("\n");
+//	preOrder(root); printf("\n");
+//	postOrder(root); printf("\n");
+//	viewTree(root, 0);
+//	int input;
+//	scanf("%d", &input);
+//	if(search(root, input)){
+//		printf("Ketemu\n");
+//	} else {
+//		printf("Tidak ketemu\n");
+//	}
+//	pop(&root, input);
+//	viewTree(root, 0);
+//	popAll(&root);
 	return 0;
 }
 
