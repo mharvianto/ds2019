@@ -114,6 +114,43 @@ void push(Node **curr, Node *parent, int angka) {
 	}
 }
 
+Node **getRightMost(Node **curr){
+	if((*curr)->right){
+		return getRightMost(&(*curr)->right);
+	}else{
+		return curr;
+	}
+}
+
+void pop(Node **curr, int angka) {
+	if(*curr){
+		if(angka == (*curr)->angka) {
+			if(!(*curr)->left && !(*curr)->right) {
+				Node *parent = (*curr)->parent;
+				free(*curr);
+				*curr = 0;
+				rebalance(parent);
+			} else if((*curr)->left && (*curr)->right) {
+				Node **temp = getRightMost(&(*curr)->left);
+				(*curr)->angka = (*temp)->angka;
+				pop(temp, (*temp)->angka);
+			} else if((*curr)->left) {
+				(*curr)->left->parent = (*curr)->parent;
+				*curr = (*curr)->left;
+				rebalance((*curr)->parent);	
+			} else {
+				(*curr)->right->parent = (*curr)->parent;
+				*curr = (*curr)->right;
+				rebalance((*curr)->parent);
+			}
+		} else if(angka < (*curr)->angka) {
+			pop(&(*curr)->left, angka);
+		} else {
+			pop(&(*curr)->right, angka);
+		}
+	}
+}
+
 void inorder(Node *curr) {
 	if(curr) {
 		inorder(curr->left);
@@ -137,6 +174,12 @@ int main(){
 		viewTree(root, 0);
 		printf("-------------------------------------\n");
 	}
+	pop(&root, 0);
+	viewTree(root, 0);
+	pop(&root, 5);
+	viewTree(root, 0);
+	pop(&root, 34);
+	viewTree(root, 0);
 	inorder(root);
 	popAll(&root);
 	return 0;
